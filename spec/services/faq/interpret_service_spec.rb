@@ -6,12 +6,12 @@ describe InterpretService do
   end
 
   describe '#list' do
-    it "With zero faqs, return don't find message" do
+    it "With zero faqs, it returns nothing found message" do
       response = InterpretService.call('list', {})
       expect(response).to match("Nada encontrado")
     end
 
-    it "With two faqs, find questions and answer in response" do
+    it "With two faqs, it finds questions and answers in responses" do
       faq1 = create(:faq, company: @company)
       faq2 = create(:faq, company: @company)
 
@@ -26,12 +26,12 @@ describe InterpretService do
   end
 
   describe '#search' do
-    it "With empty query, return don't find message" do
+    it "With empty query, it returns nothing found message" do
       response = InterpretService.call('search', {"query": ''})
       expect(response).to match("Nada encontrado")
     end
 
-    it "With valid query, find question and answer in response" do
+    it "With valid query, it finds question and answer in response" do
       faq = create(:faq, company: @company)
 
       response = InterpretService.call('search', {"query" => faq.question.split(" ").sample})
@@ -42,12 +42,12 @@ describe InterpretService do
   end
 
   describe '#search by category' do
-    it "With invalid hashtag, return don't find message" do
+    it "With invalid hashtag, it returns nothing found message" do
       response = InterpretService.call('search_by_hashtag', {"query": ''})
       expect(response).to match("Nada encontrado")
     end
 
-    it "With valid hashtag, find question and answer in response" do
+    it "With valid hashtag, it finds question and answer in response" do
       faq = create(:faq, company: @company)
       hashtag = create(:hashtag, company: @company)
       create(:faq_hashtag, faq: faq, hashtag: hashtag)
@@ -66,17 +66,17 @@ describe InterpretService do
       @hashtags = "#{FFaker::Lorem.word}, #{FFaker::Lorem.word}"
     end
 
-    it "Without hashtag params, receive a error" do
+    it "Without hashtag params, it receives an error" do
       response = InterpretService.call('create', {"question-original" => @question, "answer-original" => @answer})
       expect(response).to match("Hashtag Obrigatória")
     end
 
-    it "With valid params, receive success message" do
+    it "With valid params, it receives success message" do
       response = InterpretService.call('create', {"question-original" => @question, "answer-original" => @answer, "hashtags-original" => @hashtags})
       expect(response).to match("Criado com sucesso")
     end
 
-    it "With valid params, find question and anwser in database" do
+    it "With valid params, it finds question and anwser in database" do
       response = InterpretService.call('create', {"question-original" => @question, "answer-original" => @answer, "hashtags-original" => @hashtags})
       expect(Faq.last.question).to match(@question)
       expect(Faq.last.answer).to match(@answer)
@@ -90,13 +90,13 @@ describe InterpretService do
   end
 
   describe '#remove' do
-    it "With valid ID, remove Faq" do
+    it "With valid ID, it removes Faq" do
       faq = create(:faq, company: @company)
       response = InterpretService.call('remove', {"id" => faq.id})
       expect(response).to match("Deletado com sucesso")
     end
 
-    it "With invalid ID, receive error message" do
+    it "With invalid ID, it receives error message" do
       response = InterpretService.call('remove', {"id" => rand(1..9999)})
       expect(response).to match("Questão inválida, verifique o Id")
     end

@@ -1,6 +1,7 @@
 source :rubygems
-gem "activerecord"
+gem 'activerecord'
 gem 'pg'
+gem 'pg_search'
 gem 'rake'
 gem 'sinatra'
 gem "sinatra-activerecord"
